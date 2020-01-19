@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Антон](https://up.htmlacademy.ru/javascript/19/user/1198635).
-* Наставник: `Неизвестно`.
+* Наставник: [Юлия](https://up.htmlacademy.ru/javascript/19/user/11886).
 
 ---
 
