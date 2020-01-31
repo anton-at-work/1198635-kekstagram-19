@@ -20,7 +20,7 @@ var fillWithTestData = function () {
   };
 
   var getRandomElement = function (array) {
-    return array[getRandomInteger(0, array.length)];
+    return array[getRandomInteger(0, array.length - 1)];
   };
 
   var getComments = function () {
