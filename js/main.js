@@ -1,6 +1,6 @@
 'use strict';
 
-var fillWithTestData = function () {
+(function () {
   var TYPICAL_COMMENTS = ['Всё отлично!',
     'В целом всё неплохо. Но не всё.',
     'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -13,6 +13,8 @@ var fillWithTestData = function () {
   var MAX_LIKES = 200;
   var MAX_COMMENTS = 10;
   var MAX_AVATARS = 6;
+  var ESC_KEY = 'Escape';
+  var ENTER_KEY = 'Enter';
 
   var getRandomInteger = function (min, max) {
     var rand = min + Math.random() * (max + 1 - min);
@@ -71,6 +73,49 @@ var fillWithTestData = function () {
   };
 
   addPhotos(createTestPhotos());
-};
 
-fillWithTestData();
+  var photoDialog = document.querySelector('.img-upload__overlay');
+  var photoFile = document.querySelector('#upload-file');
+  var photoClose = photoDialog.querySelector('#upload-cancel');
+  var photoEffectLine = photoDialog.querySelector('.effect-level__line');
+  var photoEffectPin = photoDialog.querySelector('.effect-level__pin');
+
+  var onPopupEscPress = function (evt) {
+    if (evt.key === ESC_KEY) {
+      closePopup();
+    }
+  };
+
+  var openPopup = function () {
+    photoDialog.classList.remove('hidden');
+    document.querySelector('body').classList.add('modal-open');
+    document.addEventListener('keydown', onPopupEscPress);
+  };
+
+  var closePopup = function () {
+    photoDialog.classList.add('hidden');
+    document.querySelector('body').classList.remove('modal-open');
+    document.removeEventListener('keydown', onPopupEscPress);
+  };
+
+  photoFile.addEventListener('change', function () {
+    openPopup();
+  });
+
+
+  photoClose.addEventListener('click', function () {
+    closePopup();
+  });
+
+  photoClose.addEventListener('keydown', function (evt) {
+    if (evt.key === ENTER_KEY) {
+      closePopup();
+    }
+  });
+
+  photoEffectPin.addEventListener('mouseup', function (evt) {
+    photoEffectPin.style.left = '33%'; //evt.offsetX;
+    console.log(evt.clientX);
+  });
+
+})();
