@@ -79,6 +79,7 @@
   var photoClose = photoDialog.querySelector('#upload-cancel');
   var photoEffectLine = photoDialog.querySelector('.effect-level__line');
   var photoEffectPin = photoDialog.querySelector('.effect-level__pin');
+  var effectItem = photoDialog.querySelector('.effects__item');
 
   var onPopupEscPress = function (evt) {
     if (evt.key === ESC_KEY) {
@@ -98,14 +99,10 @@
     document.removeEventListener('keydown', onPopupEscPress);
   };
 
-  photoFile.addEventListener('change', function () {
-    openPopup();
-  });
+  photoFile.addEventListener('change', openPopup);
 
 
-  photoClose.addEventListener('click', function () {
-    closePopup();
-  });
+  photoClose.addEventListener('click', closePopup);
 
   photoClose.addEventListener('keydown', function (evt) {
     if (evt.key === ENTER_KEY) {
@@ -113,9 +110,14 @@
     }
   });
 
-  photoEffectPin.addEventListener('mouseup', function (evt) {
-    photoEffectPin.style.left = '33%'; //evt.offsetX;
-    console.log(evt.clientX);
+  photoEffectLine.addEventListener('mouseup', function (evt) {
+    evt.preventDefault();
+    photoEffectPin.style.left = '33%'; // evt.offsetX;
+    // console.log(evt.clientX);
+  });
+
+  effectItem.addEventListener('click', function (evt) {
+    evt.preventDefault();
   });
 
 })();
