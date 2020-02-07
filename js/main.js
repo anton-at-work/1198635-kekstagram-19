@@ -15,6 +15,7 @@
   var MAX_AVATARS = 6;
   var ESC_KEY = 'Escape';
   var ENTER_KEY = 'Enter';
+  var DEFAULT_EFFECT_DEPTH = 20;
 
   var getRandomInteger = function (min, max) {
     var rand = min + Math.random() * (max + 1 - min);
@@ -79,7 +80,9 @@
   var photoClose = photoDialog.querySelector('#upload-cancel');
   var photoEffectLine = photoDialog.querySelector('.effect-level__line');
   var photoEffectPin = photoDialog.querySelector('.effect-level__pin');
-  var effectItem = photoDialog.querySelector('.effects__item');
+  var photoEffectDepth = photoDialog.querySelector('.effect-level__depth');
+  var effectItems = photoDialog.querySelectorAll('.effects__item');
+  var hashtagInput = photoDialog.querySelector('.text__hashtags');
 
   var onPopupEscPress = function (evt) {
     if (evt.key === ESC_KEY) {
@@ -116,8 +119,15 @@
     // console.log(evt.clientX);
   });
 
-  effectItem.addEventListener('click', function (evt) {
-    evt.preventDefault();
+  for (var i = 0; i < effectItems.length; i++) {
+    effectItems[i].addEventListener('click', function () {
+      photoEffectPin.style.left = DEFAULT_EFFECT_DEPTH + '%';
+      photoEffectDepth.style.width = DEFAULT_EFFECT_DEPTH + '%';
+    });
+  }
+
+  hashtagInput.addEventListener('change', function () {
+    hashtagInput.setCustomValidity('Invalid field!!!!');
   });
 
 })();
