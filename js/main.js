@@ -16,6 +16,10 @@
   var ESC_KEY = 'Escape';
   var ENTER_KEY = 'Enter';
   var DEFAULT_EFFECT_DEPTH = 20;
+  var MAX_HASHTAGS = 5;
+  var MIN_HASHTAGS_LENGTH = 2;
+  var MAX_HASHTAGS_LENGTH = 20;
+  var HASHTAG_PATTERN = '^[#а-яА-ЯёЁa-zA-Z0-9]+$';
 
   var getRandomInteger = function (min, max) {
     var rand = min + Math.random() * (max + 1 - min);
@@ -83,9 +87,10 @@
   var photoEffectDepth = photoDialog.querySelector('.effect-level__depth');
   var effectItems = photoDialog.querySelectorAll('.effects__item');
   var hashtagInput = photoDialog.querySelector('.text__hashtags');
+  var photoComment = photoDialog.querySelector('.text__description');
 
   var onPopupEscPress = function (evt) {
-    if (evt.key === ESC_KEY) {
+    if (evt.key === ESC_KEY && evt.target !== hashtagInput && evt.target !== photoComment) {
       closePopup();
     }
   };
@@ -127,19 +132,27 @@
   }
 
   hashtagInput.addEventListener('change', function () {
-    var hashtags = hashtagInput.value.trim().split(' ');
-    // console.log(hashtagInput.value.trim());
-    for (var j = 0; j < hashtags.length; j++) {
-      // console.log(hashtags[j]);
-      if (hashtags[j].indexOf('#') !== 0) {
-        hashtagInput.setCustomValidity('Хэш-тег должен начинаться с решётки!');
-      } else if (hashtags[j].length < 2) {
-        hashtagInput.setCustomValidity('Хэш-тег слишком короткий!');
-      } else if (hashtags[j].length > 20) {
-        hashtagInput.setCustomValidity('Хэш-тег слишком длинный!');
+    var hashtagValidity = '';
+    var hashtagsStr = hashtagInput.value.trim();
+    var hashtags = hashtagsStr.split(' ');
+    if (hashtags.length <= MAX_HASHTAGS) {
+      for (var j = 0; j < hashtags.length; j++) {
+        if (hashtags[j].indexOf('#') !== 0) {
+          hashtagValidity = 'Хэш-тег должен начинаться с решётки!';
+        } else if (hashtags[j].length < MIN_HASHTAGS_LENGTH) {
+          hashtagValidity = 'Хэш-тег слишком короткий!';
+        } else if (hashtags[j].length > MAX_HASHTAGS_LENGTH) {
+          hashtagValidity = 'Хэш-тег слишком длинный!';
+        } else if (!RegExp(HASHTAG_PATTERN).test(hashtags[j])) {
+          hashtagValidity = 'Хэш-тег содержит недопустимые символы!';
+        } else if (hashtagsStr.split(hashtags[j]).length > 2) {
+          hashtagValidity = 'Хэш-теги не должны повторяться!';
+        }
       }
+    } else {
+      hashtagValidity = 'Слишком много хэш-тегов!';
     }
-
+    hashtagInput.setCustomValidity(hashtagValidity);
   });
 
 })();
