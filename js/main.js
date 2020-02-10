@@ -127,7 +127,19 @@
   }
 
   hashtagInput.addEventListener('change', function () {
-    hashtagInput.setCustomValidity('Invalid field!!!!');
+    var hashtags = hashtagInput.value.trim().split(' ');
+    // console.log(hashtagInput.value.trim());
+    for (var j = 0; j < hashtags.length; j++) {
+      // console.log(hashtags[j]);
+      if (hashtags[j].indexOf('#') !== 0) {
+        hashtagInput.setCustomValidity('Хэш-тег должен начинаться с решётки!');
+      } else if (hashtags[j].length < 2) {
+        hashtagInput.setCustomValidity('Хэш-тег слишком короткий!');
+      } else if (hashtags[j].length > 20) {
+        hashtagInput.setCustomValidity('Хэш-тег слишком длинный!');
+      }
+    }
+
   });
 
 })();
