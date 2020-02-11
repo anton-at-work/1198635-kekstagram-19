@@ -19,7 +19,7 @@
   var MAX_HASHTAGS = 5;
   var MIN_HASHTAGS_LENGTH = 2;
   var MAX_HASHTAGS_LENGTH = 20;
-  var HASHTAG_PATTERN = '^[#а-яА-ЯёЁa-zA-Z0-9]+$';
+  var HASHTAG_PATTERN = '^#[а-яёa-z0-9]+$';
 
   var getRandomInteger = function (min, max) {
     var rand = min + Math.random() * (max + 1 - min);
@@ -105,6 +105,7 @@
     photoDialog.classList.add('hidden');
     document.querySelector('body').classList.remove('modal-open');
     document.removeEventListener('keydown', onPopupEscPress);
+    photoFile.value = '';
   };
 
   photoFile.addEventListener('change', openPopup);
@@ -120,8 +121,11 @@
 
   photoEffectLine.addEventListener('mouseup', function (evt) {
     evt.preventDefault();
-    photoEffectPin.style.left = '33%'; // evt.offsetX;
-    // console.log(evt.clientX);
+    var lineCoords = photoEffectLine.getBoundingClientRect();
+    var lineWidth = photoEffectLine.offsetWidth;
+    var level = Math.round(100 * (evt.clientX - lineCoords.left) / lineWidth);
+    photoEffectPin.style.left = level + '%';
+    photoEffectDepth.style.width = level + '%';
   });
 
   for (var i = 0; i < effectItems.length; i++) {
@@ -133,19 +137,30 @@
 
   hashtagInput.addEventListener('change', function () {
     var hashtagValidity = '';
-    var hashtagsStr = hashtagInput.value.trim();
-    var hashtags = hashtagsStr.split(' ');
+
+    var hashtags = hashtagInput.value.trim().toLowerCase().split(' ');
+
+    var elementsCount = function (array, element) {
+      var count = 0;
+      for (var j = 0; j < array.length; j++) {
+        if (array[j] === element) {
+          count++;
+        }
+      }
+      return count;
+    };
+
     if (hashtags.length <= MAX_HASHTAGS) {
-      for (var j = 0; j < hashtags.length; j++) {
-        if (hashtags[j].indexOf('#') !== 0) {
+      for (var l = 0; l < hashtags.length; l++) {
+        if (hashtags[l].indexOf('#') !== 0) {
           hashtagValidity = 'Хэш-тег должен начинаться с решётки!';
-        } else if (hashtags[j].length < MIN_HASHTAGS_LENGTH) {
+        } else if (hashtags[l].length < MIN_HASHTAGS_LENGTH) {
           hashtagValidity = 'Хэш-тег слишком короткий!';
-        } else if (hashtags[j].length > MAX_HASHTAGS_LENGTH) {
+        } else if (hashtags[l].length > MAX_HASHTAGS_LENGTH) {
           hashtagValidity = 'Хэш-тег слишком длинный!';
-        } else if (!RegExp(HASHTAG_PATTERN).test(hashtags[j])) {
+        } else if (!RegExp(HASHTAG_PATTERN).test(hashtags[l])) {
           hashtagValidity = 'Хэш-тег содержит недопустимые символы!';
-        } else if (hashtagsStr.split(hashtags[j]).length > 2) {
+        } else if (elementsCount(hashtags, hashtags[l]) > 1) {
           hashtagValidity = 'Хэш-теги не должны повторяться!';
         }
       }
