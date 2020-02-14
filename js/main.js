@@ -140,7 +140,7 @@
 
     var hashtags = hashtagInput.value.trim().toLowerCase().split(' ');
 
-    var elementsCount = function (array, element) {
+    var hasDuplicates = function (array, element) {
       var count = 0;
       for (var j = 0; j < array.length; j++) {
         if (array[j] === element) {
@@ -160,7 +160,7 @@
           hashtagValidity = 'Хэш-тег слишком длинный!';
         } else if (!RegExp(HASHTAG_PATTERN).test(hashtags[l])) {
           hashtagValidity = 'Хэш-тег содержит недопустимые символы!';
-        } else if (elementsCount(hashtags, hashtags[l]) > 1) {
+        } else if (!hasDuplicates(hashtags, hashtags[l])) {
           hashtagValidity = 'Хэш-теги не должны повторяться!';
         }
       }
