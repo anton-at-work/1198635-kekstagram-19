@@ -141,13 +141,12 @@
     var hashtags = hashtagInput.value.trim().toLowerCase().split(' ');
 
     var hasDuplicates = function (array, element) {
-      var count = 0;
-      for (var j = 0; j < array.length; j++) {
-        if (array[j] === element) {
-          count++;
-        }
+      var firstIndex = array.indexOf(element);
+      var lastIndex = array.lastIndexOf(element);
+      if (firstIndex !== lastIndex) {
+        return true;
       }
-      return count;
+      return false;
     };
 
     if (hashtags.length <= MAX_HASHTAGS) {
@@ -160,7 +159,7 @@
           hashtagValidity = 'Хэш-тег слишком длинный!';
         } else if (!RegExp(HASHTAG_PATTERN).test(hashtags[l])) {
           hashtagValidity = 'Хэш-тег содержит недопустимые символы!';
-        } else if (!hasDuplicates(hashtags, hashtags[l])) {
+        } else if (hasDuplicates(hashtags, hashtags[l])) {
           hashtagValidity = 'Хэш-теги не должны повторяться!';
         }
       }
