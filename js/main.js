@@ -186,14 +186,14 @@
       } else {
         photoEffectFieldset.classList.remove('hidden');
         photoimg.className = effectToStyle[effect];
-        setEffect(DEFAULT_EFFECT_DEPTH, effect);
       }
+      setEffect(DEFAULT_EFFECT_DEPTH, effect);
     });
   };
 
-  for (var i = 0; i < effectRadios.length; i++) {
-    setEffectListner(effectRadios[i], effectRadios[i].value);
-  }
+  effectRadios.forEach(function (it) {
+    setEffectListner(it, it.value);
+  });
 
   var getScale = function () {
     return parseInt(photoScale.value, 10);
@@ -246,19 +246,19 @@
     };
 
     if (hashtags.length <= MAX_HASHTAGS) {
-      for (var l = 0; l < hashtags.length; l++) {
-        if (hashtags[l].indexOf('#') !== 0) {
+      hashtags.forEach(function (it) {
+        if (it.indexOf('#') !== 0) {
           hashtagValidity = 'Хэш-тег должен начинаться с решётки!';
-        } else if (hashtags[l].length < MIN_HASHTAGS_LENGTH) {
+        } else if (it.length < MIN_HASHTAGS_LENGTH) {
           hashtagValidity = 'Хэш-тег слишком короткий!';
-        } else if (hashtags[l].length > MAX_HASHTAGS_LENGTH) {
+        } else if (it.length > MAX_HASHTAGS_LENGTH) {
           hashtagValidity = 'Хэш-тег слишком длинный!';
-        } else if (!RegExp(HASHTAG_PATTERN).test(hashtags[l])) {
+        } else if (!RegExp(HASHTAG_PATTERN).test(it)) {
           hashtagValidity = 'Хэш-тег содержит недопустимые символы!';
-        } else if (hasDuplicates(hashtags, hashtags[l])) {
+        } else if (hasDuplicates(hashtags, it)) {
           hashtagValidity = 'Хэш-теги не должны повторяться!';
         }
-      }
+      });
     } else {
       hashtagValidity = 'Слишком много хэш-тегов!';
     }
