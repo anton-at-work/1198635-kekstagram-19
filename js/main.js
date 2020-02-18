@@ -170,7 +170,6 @@
     document.removeEventListener('keydown', onPopupEscPress);
     photoFile.value = '';
     photoimg.className = '';
-    photoimg.style = '';
     photoEffectNone.checked = true;
     photoEffectFieldset.classList.add('hidden');
     photoComment.textContent = '';
