@@ -24,6 +24,7 @@
   var MIN_HASHTAGS_LENGTH = 2;
   var MAX_HASHTAGS_LENGTH = 20;
   var HASHTAG_PATTERN = '^#[а-яёa-z0-9]+$';
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
   var effectToStyle = {
     'chrome': 'effects__preview--chrome',
@@ -128,6 +129,7 @@
   var photoEffectPin = photoDialog.querySelector('.effect-level__pin');
   var photoEffectDepth = photoDialog.querySelector('.effect-level__depth');
   var photoEffectLevel = photoDialog.querySelector('.effect-level__value');
+  var photoEffectNone = photoDialog.querySelector('#effect-none');
   var effectRadios = photoDialog.querySelectorAll('.effects__radio');
   var hashtagInput = photoDialog.querySelector('.text__hashtags');
   var photoComment = photoDialog.querySelector('.text__description');
@@ -144,6 +146,19 @@
   };
 
   var openPopup = function () {
+    var file = photoFile.files[0];
+    var fileName = file.name.toLowerCase();
+    var matches = FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+    if (matches) {
+      var reader = new FileReader();
+      reader.addEventListener('load', function () {
+        photoimg.src = reader.result;
+      });
+      reader.readAsDataURL(file);
+    }
+
     photoDialog.classList.remove('hidden');
     document.querySelector('body').classList.add('modal-open');
     document.addEventListener('keydown', onPopupEscPress);
@@ -154,6 +169,10 @@
     document.querySelector('body').classList.remove('modal-open');
     document.removeEventListener('keydown', onPopupEscPress);
     photoFile.value = '';
+    photoimg.className = '';
+    photoimg.style = '';
+    photoEffectNone.checked = true;
+    photoEffectFieldset.classList.add('hidden');
     photoComment.textContent = '';
     setScale(DEFAULT_SCALE_VALUE);
     setEffect(DEFAULT_EFFECT_DEPTH, 'none');
