@@ -60,6 +60,7 @@
 
   photoEffectPin.addEventListener('mousedown', function () {
     var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
       var pinX = moveEvt.clientX;
       var lineLeft = photoEffectLine.getBoundingClientRect().left;
       var lineWidth = photoEffectLine.offsetWidth;
