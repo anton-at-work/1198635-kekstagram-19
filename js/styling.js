@@ -58,13 +58,26 @@
   var scaleStyle = '';
   var effectStyle = '';
 
-  photoEffectLine.addEventListener('mouseup', function (evt) {
-    evt.preventDefault();
-    var lineCoords = photoEffectLine.getBoundingClientRect();
-    var lineWidth = photoEffectLine.offsetWidth;
-    var level = Math.round(100 * (evt.clientX - lineCoords.left) / lineWidth);
-    setEffect(level, document.querySelector('input[name="effect"]:checked').value);
+  photoEffectPin.addEventListener('mousedown', function () {
+    var onMouseMove = function (moveEvt) {
+      var pinX = moveEvt.clientX;
+      var lineLeft = photoEffectLine.getBoundingClientRect().left;
+      var lineWidth = photoEffectLine.offsetWidth;
+      if (pinX >= lineLeft && pinX <= lineLeft + lineWidth) {
+        var level = Math.round(100 * (pinX - lineLeft) / lineWidth);
+        setEffect(level, document.querySelector('input[name="effect"]:checked').value);
+      }
+    };
+
+    var onMouseUp = function () {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   });
+
 
   var setEffectListner = function (radioButton, effect) {
     radioButton.addEventListener('change', function () {
