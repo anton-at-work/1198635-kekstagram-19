@@ -10,6 +10,6 @@
     document.querySelector('.pictures').appendChild(fragment);
   };
 
-  addPhotos(window.createTestPhotos());
+  window.load(addPhotos);
 
 })();
