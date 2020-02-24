@@ -10,6 +10,12 @@
     document.querySelector('.pictures').appendChild(fragment);
   };
 
-  window.load(addPhotos);
+  var loadOriginGallery = function (photos) {
+    window.gallery = photos;
+    addPhotos(photos);
+    document.querySelector('.img-filters').classList.remove('img-filters--inactive');
+  };
+
+  window.load(loadOriginGallery);
 
 })();
