@@ -2,23 +2,20 @@
 
 (function () {
 
-  var DEBOUNCE_INTERVAL = 50000000000; // ms
+  var DEBOUNCE_INTERVAL = 500; // ms
   var ACTIVE_FILTER_CLASS = 'img-filters__button--active';
 
   var debounce = function (cb) {
     var lastTimeout = null;
 
-    return function () {
-      console.log(lastTimeout);
-      var parameters = arguments;
-      if (lastTimeout) {
-        window.clearTimeout(lastTimeout);
-      }
-      lastTimeout = window.setTimeout(function () {
-        console.log(DEBOUNCE_INTERVAL);
-        cb.apply(null, parameters);
-      }, DEBOUNCE_INTERVAL);
-    };
+    var parameters = arguments;
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(function () {
+      cb.apply(null, parameters);
+    }, DEBOUNCE_INTERVAL);
+
   };
 
   var filters = document.querySelector('.img-filters');
@@ -51,7 +48,9 @@
     var filter = evt.target;
     var activeFilter = document.querySelector('.' + ACTIVE_FILTER_CLASS);
     if (activeFilter !== filter) {
-      debounce(changeFilter(filter, activeFilter))();
+      debounce(function () {
+        changeFilter(filter, activeFilter);
+      });
     }
   });
 
