@@ -2,17 +2,20 @@
 
 (function () {
 
-  var DEBOUNCE_INTERVAL = 300; // ms
+  var DEBOUNCE_INTERVAL = 50000000000; // ms
+  var ACTIVE_FILTER_CLASS = 'img-filters__button--active';
 
-  window.debounce = function (cb) {
+  var debounce = function (cb) {
     var lastTimeout = null;
 
     return function () {
+      console.log(lastTimeout);
       var parameters = arguments;
       if (lastTimeout) {
         window.clearTimeout(lastTimeout);
       }
       lastTimeout = window.setTimeout(function () {
+        console.log(DEBOUNCE_INTERVAL);
         cb.apply(null, parameters);
       }, DEBOUNCE_INTERVAL);
     };
@@ -22,5 +25,35 @@
   var filterDefault = document.querySelector('#filter-default');
   var filterRandom = document.querySelector('#filter-random');
   var filterDiscussed = document.querySelector('#filter-discussed');
+
+  var changeFilter = function (oldFilter, newFilter) {
+    var photos = [];
+    switch (oldFilter) {
+      case filterDefault:
+        photos = window.gallery.origin;
+        break;
+      case filterRandom:
+        photos = [];
+        break;
+      case filterDiscussed:
+        photos = [];
+        break;
+      default:
+        return;
+    }
+    window.gallery.clear();
+    newFilter.classList.remove(ACTIVE_FILTER_CLASS);
+    oldFilter.classList.add(ACTIVE_FILTER_CLASS);
+    window.gallery.add(photos);
+  };
+
+  filters.addEventListener('click', function (evt) {
+    var filter = evt.target;
+    var activeFilter = document.querySelector('.' + ACTIVE_FILTER_CLASS);
+    if (activeFilter !== filter) {
+      debounce(changeFilter(filter, activeFilter))();
+    }
+  });
+
 
 })();
