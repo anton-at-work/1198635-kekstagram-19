@@ -22,11 +22,11 @@
     document.querySelector('.img-filters').classList.remove('img-filters--inactive');
   };
 
-  window.load(loadOriginGallery);
-
   window.gallery = {
+    origin: [],
     add: addPhotos,
     clear: deletePhotos
   };
 
+  window.load(loadOriginGallery);
 })();

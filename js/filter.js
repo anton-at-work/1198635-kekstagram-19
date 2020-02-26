@@ -3,7 +3,17 @@
 (function () {
 
   var DEBOUNCE_INTERVAL = 500; // ms
+  var MAX_RANDOM_PHOTOS = 10;
   var ACTIVE_FILTER_CLASS = 'img-filters__button--active';
+
+  var getRandomInteger = function (min, max) {
+    var rand = min + Math.random() * (max + 1 - min);
+    return Math.floor(rand);
+  };
+
+  var getRandomElement = function (array) {
+    return array[getRandomInteger(0, array.length - 1)];
+  };
 
   var debounce = function (cb) {
     var lastTimeout = null;
@@ -24,16 +34,24 @@
   var filterDiscussed = document.querySelector('#filter-discussed');
 
   var changeFilter = function (oldFilter, newFilter) {
-    var photos = [];
+    var photos = window.gallery.origin.slice();
     switch (oldFilter) {
       case filterDefault:
-        photos = window.gallery.origin;
         break;
       case filterRandom:
-        photos = [];
+        var randomPhotos = [];
+        while (randomPhotos.length < MAX_RANDOM_PHOTOS) {
+          var el = getRandomElement(photos);
+          if (randomPhotos.indexOf(el) === -1) {
+            randomPhotos.push(el);
+          }
+        }
+        photos = randomPhotos;
         break;
       case filterDiscussed:
-        photos = [];
+        photos.sort(function (left, right) {
+          return right.comments.length - left.comments.length;
+        });
         break;
       default:
         return;
