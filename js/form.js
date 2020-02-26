@@ -34,13 +34,12 @@
       var reader = new FileReader();
       reader.addEventListener('load', function () {
         photoimg.src = reader.result;
+        photoDialog.classList.remove('hidden');
+        document.querySelector('body').classList.add('modal-open');
+        document.addEventListener('keydown', onPopupEscPress);
       });
       reader.readAsDataURL(file);
     }
-
-    photoDialog.classList.remove('hidden');
-    document.querySelector('body').classList.add('modal-open');
-    document.addEventListener('keydown', onPopupEscPress);
   };
 
   var closePopup = function () {
