@@ -20,6 +20,7 @@
     window.gallery.origin = photos;
     addPhotos(photos);
     document.querySelector('.img-filters').classList.remove('img-filters--inactive');
+    window.preview();
   };
 
   window.gallery = {
