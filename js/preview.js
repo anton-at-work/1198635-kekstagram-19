@@ -1,15 +1,13 @@
 'use strict';
 
 (function () {
-  var ESC_KEY = 'Escape';
-  var ENTER_KEY = 'Enter';
 
   var pictures = document.querySelector('.pictures');
   var photoPreview = document.querySelector('.big-picture');
   var previewClose = document.querySelector('#picture-cancel');
 
   var onPreviewEscPress = function (evt) {
-    if (evt.key === ESC_KEY) {
+    if (window.util.isEsc(evt)) {
       closePreview();
     }
   };
@@ -54,25 +52,25 @@
     photoPreviewSocialCommentCount.classList.add('hidden');
     photoPreviewCommentLoader.classList.add('hidden');
     photoPreview.classList.remove('hidden');
-    document.querySelector('body').classList.add('modal-open');
+    window.util.hideBodyScroll();
     document.addEventListener('keydown', onPreviewEscPress);
   };
 
   var closePreview = function () {
     photoPreview.classList.add('hidden');
-    document.querySelector('body').classList.remove('modal-open');
+    window.util.showBodyScroll();
     document.removeEventListener('keydown', onPreviewEscPress);
   };
 
   pictures.addEventListener('click', showPreview);
   pictures.addEventListener('keydown', function (evt) {
-    if (evt.key === ENTER_KEY) {
+    if (window.util.isEnter(evt)) {
       showPreview(evt);
     }
   });
   previewClose.addEventListener('click', closePreview);
   previewClose.addEventListener('keydown', function (evt) {
-    if (evt.key === ENTER_KEY) {
+    if (window.util.isEnter(evt)) {
       closePreview();
     }
   });

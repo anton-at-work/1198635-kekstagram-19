@@ -2,8 +2,6 @@
 
 (function () {
 
-  var ESC_KEY = 'Escape';
-  var ENTER_KEY = 'Enter';
   var MAX_HASHTAGS = 5;
   var MIN_HASHTAGS_LENGTH = 2;
   var MAX_HASHTAGS_LENGTH = 20;
@@ -19,7 +17,7 @@
 
 
   var onPopupEscPress = function (evt) {
-    if (evt.key === ESC_KEY && evt.target !== hashtagInput && evt.target !== photoComment) {
+    if (window.util.isEsc(evt) && evt.target !== hashtagInput && evt.target !== photoComment) {
       closePopup();
     }
   };
@@ -35,7 +33,7 @@
       reader.addEventListener('load', function () {
         photoimg.src = reader.result;
         photoDialog.classList.remove('hidden');
-        document.querySelector('body').classList.add('modal-open');
+        window.util.hideBodyScroll();
         document.addEventListener('keydown', onPopupEscPress);
       });
       reader.readAsDataURL(file);
@@ -44,7 +42,7 @@
 
   var closePopup = function () {
     photoDialog.classList.add('hidden');
-    document.querySelector('body').classList.remove('modal-open');
+    window.util.showBodyScroll();
     document.removeEventListener('keydown', onPopupEscPress);
     photoFile.value = '';
     photoComment.textContent = '';
@@ -57,7 +55,7 @@
   photoClose.addEventListener('click', closePopup);
 
   photoClose.addEventListener('keydown', function (evt) {
-    if (evt.key === ENTER_KEY) {
+    if (window.util.isEnter(evt)) {
       closePopup();
     }
   });
