@@ -8,21 +8,21 @@
   var HASHTAG_PATTERN = '^#[а-яёa-z0-9]+$';
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
-  var photoDialog = document.querySelector('.img-upload__overlay');
   var photoFile = document.querySelector('#upload-file');
-  var photoimg = document.querySelector('.img-upload__preview img');
-  var photoClose = photoDialog.querySelector('#upload-cancel');
-  var hashtagInput = photoDialog.querySelector('.text__hashtags');
-  var photoComment = photoDialog.querySelector('.text__description');
+  var uploadDialog = document.querySelector('.img-upload__overlay');
+  var uploadImg = uploadDialog.querySelector('.img-upload__preview img');
+  var btnClose = uploadDialog.querySelector('#upload-cancel');
+  var hashtagInput = uploadDialog.querySelector('.text__hashtags');
+  var photoComment = uploadDialog.querySelector('.text__description');
 
 
-  var onPopupEscPress = function (evt) {
+  var onDialogEscPress = function (evt) {
     if (window.util.isEsc(evt) && evt.target !== hashtagInput && evt.target !== photoComment) {
-      closePopup();
+      closeDialog();
     }
   };
 
-  var openPopup = function () {
+  var openDialog = function () {
     var file = photoFile.files[0];
     var fileName = file.name.toLowerCase();
     var matches = FILE_TYPES.some(function (it) {
@@ -31,32 +31,31 @@
     if (matches) {
       var reader = new FileReader();
       reader.addEventListener('load', function () {
-        photoimg.src = reader.result;
-        photoDialog.classList.remove('hidden');
+        uploadImg.src = reader.result;
+        uploadDialog.classList.remove('hidden');
         window.util.hideBodyScroll();
-        document.addEventListener('keydown', onPopupEscPress);
+        document.addEventListener('keydown', onDialogEscPress);
       });
       reader.readAsDataURL(file);
     }
   };
 
-  var closePopup = function () {
-    photoDialog.classList.add('hidden');
+  var closeDialog = function () {
+    uploadDialog.classList.add('hidden');
     window.util.showBodyScroll();
-    document.removeEventListener('keydown', onPopupEscPress);
+    document.removeEventListener('keydown', onDialogEscPress);
     photoFile.value = '';
     photoComment.textContent = '';
     window.setDefaultStyle();
   };
 
-  photoFile.addEventListener('change', openPopup);
+  photoFile.addEventListener('change', openDialog);
 
+  btnClose.addEventListener('click', closeDialog);
 
-  photoClose.addEventListener('click', closePopup);
-
-  photoClose.addEventListener('keydown', function (evt) {
+  btnClose.addEventListener('keydown', function (evt) {
     if (window.util.isEnter(evt)) {
-      closePopup();
+      closeDialog();
     }
   });
 
