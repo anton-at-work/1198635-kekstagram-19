@@ -1,15 +1,19 @@
 'use strict';
 
 (function () {
-  var ESC_KEY = 'Escape';
-  var ENTER_KEY = 'Enter';
 
   var pictures = document.querySelector('.pictures');
-  var photoPreview = document.querySelector('.big-picture');
-  var previewClose = document.querySelector('#picture-cancel');
+  var bigPicture = document.querySelector('.big-picture');
+  var btnClose = document.querySelector('#picture-cancel');
 
   var onPreviewEscPress = function (evt) {
-    if (evt.key === ESC_KEY) {
+    if (window.util.isEsc(evt)) {
+      closePreview();
+    }
+  };
+
+  var onBtnCloseEnterPress = function (evt) {
+    if (window.util.isEnter(evt)) {
       closePreview();
     }
   };
@@ -23,13 +27,13 @@
       return;
     }
     var currentImg = el.querySelector('.picture__img');
-    var photoPreviewImg = photoPreview.querySelector('.big-picture__img img');
-    var photoPreviewCaption = photoPreview.querySelector('.social__caption');
-    var photoPreviewLikes = photoPreview.querySelector('.likes-count');
-    var photoPreviewCommentsCount = photoPreview.querySelector('.comments-count');
-    var photoPreviewComments = photoPreview.querySelector('.social__comments');
-    var photoPreviewSocialCommentCount = photoPreview.querySelector('.social__comment-count');
-    var photoPreviewCommentLoader = photoPreview.querySelector('.comments-loader');
+    var bigPictureImg = bigPicture.querySelector('.big-picture__img img');
+    var bigPictureCaption = bigPicture.querySelector('.social__caption');
+    var bigPictureLikes = bigPicture.querySelector('.likes-count');
+    var bigPictureCommentsCount = bigPicture.querySelector('.comments-count');
+    var bigPictureComments = bigPicture.querySelector('.social__comments');
+    var bigPictureSocialCommentCount = bigPicture.querySelector('.social__comment-count');
+    var bigPictureCommentLoader = bigPicture.querySelector('.comments-loader');
     var photos = window.gallery.origin;
     for (var i = 0; i < photos.length; i++) {
       if (currentImg.src.indexOf(photos[i].url) > -1) {
@@ -38,44 +42,40 @@
       }
     }
 
-    photoPreviewImg.src = currentPhoto.url;
-    photoPreviewImg.alt = currentPhoto.description;
-    photoPreviewLikes.textContent = currentPhoto.likes;
-    photoPreviewCommentsCount.textContent = currentPhoto.comments.length;
-    var comments = '';
+    bigPictureImg.src = currentPhoto.url;
+    bigPictureImg.alt = currentPhoto.description;
+    bigPictureLikes.textContent = currentPhoto.likes;
+    bigPictureCommentsCount.textContent = currentPhoto.comments.length;
+
+    var fragment = document.createDocumentFragment();
     currentPhoto.comments.forEach(function (it) {
-      comments += '<li class="social__comment"><img class="social__picture" src="' +
-      it.avatar + '" alt="' +
-      it.name + '" width="35" height="35"><p class="social__text">' +
-      it.message + '</p></li>';
+      fragment.appendChild(window.render.comment(it));
     });
-    photoPreviewComments.innerHTML = comments;
-    photoPreviewCaption.textContent = currentPhoto.description;
-    photoPreviewSocialCommentCount.classList.add('hidden');
-    photoPreviewCommentLoader.classList.add('hidden');
-    photoPreview.classList.remove('hidden');
-    document.querySelector('body').classList.add('modal-open');
+    bigPictureComments.appendChild(fragment);
+
+    bigPictureCaption.textContent = currentPhoto.description;
+    bigPictureSocialCommentCount.classList.add('hidden');
+    bigPictureCommentLoader.classList.add('hidden');
+    bigPicture.classList.remove('hidden');
+    window.util.hideBodyScroll();
     document.addEventListener('keydown', onPreviewEscPress);
+    btnClose.addEventListener('click', closePreview);
+    btnClose.addEventListener('keydown', onBtnCloseEnterPress);
   };
 
   var closePreview = function () {
-    photoPreview.classList.add('hidden');
-    document.querySelector('body').classList.remove('modal-open');
+    bigPicture.classList.add('hidden');
+    window.util.showBodyScroll();
     document.removeEventListener('keydown', onPreviewEscPress);
+    btnClose.removeEventListener('click', closePreview);
+    btnClose.removeEventListener('keydown', onBtnCloseEnterPress);
   };
 
   pictures.addEventListener('click', showPreview);
   pictures.addEventListener('keydown', function (evt) {
-    if (evt.key === ENTER_KEY) {
+    if (window.util.isEnter(evt)) {
       showPreview(evt);
     }
   });
-  previewClose.addEventListener('click', closePreview);
-  previewClose.addEventListener('keydown', function (evt) {
-    if (evt.key === ENTER_KEY) {
-      closePreview();
-    }
-  });
-
 
 })();

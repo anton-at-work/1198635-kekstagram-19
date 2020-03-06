@@ -7,6 +7,7 @@
   var MIN_SCALE_VALUE = 25;
   var MAX_SCALE_VALUE = 100;
   var SCALE_STEP = 25;
+  var MAX_PERCENT = 100;
 
   var effectToStyle = {
     'chrome': 'effects__preview--chrome',
@@ -65,7 +66,7 @@
       var lineLeft = photoEffectLine.getBoundingClientRect().left;
       var lineWidth = photoEffectLine.offsetWidth;
       if (pinX >= lineLeft && pinX <= lineLeft + lineWidth) {
-        var level = Math.round(100 * (pinX - lineLeft) / lineWidth);
+        var level = Math.round(MAX_PERCENT * (pinX - lineLeft) / lineWidth);
         setEffect(level, document.querySelector('input[name="effect"]:checked').value);
       }
     };
@@ -103,7 +104,7 @@
 
   var setScale = function (value) {
     photoScale.value = value + '%';
-    scaleStyle = 'transform: scale(' + value / 100 + '); ';
+    scaleStyle = 'transform: scale(' + value / MAX_PERCENT + '); ';
     updatePhotoStyle();
   };
 
@@ -114,7 +115,7 @@
 
     effectStyle = '';
     if (type !== 'none') {
-      var currentEffectlevel = effectToMin[type] + (effectToMax[type] - effectToMin[type]) * value / 100;
+      var currentEffectlevel = effectToMin[type] + (effectToMax[type] - effectToMin[type]) * value / MAX_PERCENT;
       effectStyle = 'filter: ' + effectToFilter[type] + '(' + currentEffectlevel + effectToUnit[type] + ');';
     }
     updatePhotoStyle();
