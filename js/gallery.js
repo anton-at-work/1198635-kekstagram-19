@@ -11,7 +11,7 @@
   var addPhotos = function (photos) {
     var fragment = document.createDocumentFragment();
     photos.forEach(function (it) {
-      fragment.appendChild(window.renderPhoto(it));
+      fragment.appendChild(window.render.photo(it));
     });
     document.querySelector('.pictures').appendChild(fragment);
   };
