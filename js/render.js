@@ -28,7 +28,9 @@
     var popUpTemplate = document.querySelector('#' + template).content.querySelector('.' + template);
     var popUpElement = popUpTemplate.cloneNode(true);
 
-    popUpElement.querySelector('.' + template + '__title').textContent = message;
+    if (message) {
+      popUpElement.querySelector('.' + template + '__title').textContent = message;
+    }
 
     return popUpElement;
   };

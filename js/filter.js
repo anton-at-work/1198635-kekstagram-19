@@ -6,6 +6,8 @@
   var MAX_RANDOM_PHOTOS = 10;
   var ACTIVE_FILTER_CLASS = 'img-filters__button--active';
 
+  var lastTimeout = null;
+
   var getRandomInteger = function (min, max) {
     var rand = min + Math.random() * (max + 1 - min);
     return Math.floor(rand);
@@ -16,8 +18,6 @@
   };
 
   var debounce = function (cb) {
-    var lastTimeout = null;
-
     var parameters = arguments;
     if (lastTimeout) {
       window.clearTimeout(lastTimeout);
@@ -65,11 +65,9 @@
   filters.addEventListener('click', function (evt) {
     var filter = evt.target;
     var activeFilter = document.querySelector('.' + ACTIVE_FILTER_CLASS);
-    if (activeFilter !== filter) {
-      debounce(function () {
-        changeFilter(filter, activeFilter);
-      });
-    }
+    debounce(function () {
+      changeFilter(filter, activeFilter);
+    });
   });
 
 

@@ -28,12 +28,17 @@
 
   var onSuccess = function () {
     closeDialog();
-    window.util.onSuccess('Изображение успешно загружено');
+    window.util.onSuccess();
+  };
+
+  var onError = function (errorText) {
+    closeDialog();
+    window.util.onError(errorText);
   };
 
   var onFormSubmit = function (evt) {
     evt.preventDefault();
-    window.request('POST', URL, new FormData(uploadForm), onSuccess, window.util.onError);
+    window.request('POST', URL, new FormData(uploadForm), onSuccess, onError);
   };
 
   var openDialog = function () {
@@ -67,7 +72,8 @@
     hashtagInput.removeEventListener('change', window.hashtag.validate);
     uploadForm.removeEventListener('submit', onFormSubmit);
     photoFile.value = '';
-    photoComment.textContent = '';
+    hashtagInput.value = '';
+    photoComment.value = '';
     window.setDefaultStyle();
   };
 
