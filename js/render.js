@@ -15,17 +15,27 @@
 
   var renderComment = function (comment) {
     var commentTemplate = document.querySelector('#comment').content.querySelector('.social__comment');
-    var commenElement = commentTemplate.cloneNode(true);
+    var commentElement = commentTemplate.cloneNode(true);
 
-    commenElement.querySelector('.social__picture').src = comment.avatar;
-    commenElement.querySelector('.social__picture').alt = comment.name;
-    commenElement.querySelector('.social__text').textContent = comment.message;
+    commentElement.querySelector('.social__picture').src = comment.avatar;
+    commentElement.querySelector('.social__picture').alt = comment.name;
+    commentElement.querySelector('.social__text').textContent = comment.message;
 
-    return commenElement;
+    return commentElement;
+  };
+
+  var renderPopUp = function (template, message) {
+    var popUpTemplate = document.querySelector('#' + template).content.querySelector('.' + template);
+    var popUpElement = popUpTemplate.cloneNode(true);
+
+    popUpElement.querySelector('.' + template + '__title').textContent = message;
+
+    return popUpElement;
   };
 
   window.render = {
     photo: renderPhoto,
-    comment: renderComment
+    comment: renderComment,
+    popUp: renderPopUp
   };
 })();

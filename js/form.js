@@ -3,9 +3,11 @@
 (function () {
 
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var URL = 'https://js.dump.academy/kekstagram';
 
   var photoFile = document.querySelector('#upload-file');
-  var uploadDialog = document.querySelector('.img-upload__overlay');
+  var uploadForm = document.querySelector('.img-upload__form');
+  var uploadDialog = uploadForm.querySelector('.img-upload__overlay');
   var uploadImg = uploadDialog.querySelector('.img-upload__preview img');
   var btnClose = uploadDialog.querySelector('#upload-cancel');
   var hashtagInput = uploadDialog.querySelector('.text__hashtags');
@@ -24,6 +26,16 @@
     }
   };
 
+  var onSuccess = function () {
+    closeDialog();
+    window.util.onSuccess('Изображение успешно загружено');
+  };
+
+  var onFormSubmit = function (evt) {
+    evt.preventDefault();
+    window.request('POST', URL, new FormData(uploadForm), onSuccess, window.util.onError);
+  };
+
   var openDialog = function () {
     var file = photoFile.files[0];
     var fileName = file.name.toLowerCase();
@@ -40,6 +52,7 @@
         btnClose.addEventListener('click', closeDialog);
         btnClose.addEventListener('keydown', onBtnCloseEnterPress);
         hashtagInput.addEventListener('change', window.hashtag.validate);
+        uploadForm.addEventListener('submit', onFormSubmit);
       });
       reader.readAsDataURL(file);
     }
@@ -52,6 +65,7 @@
     btnClose.removeEventListener('click', closeDialog);
     btnClose.removeEventListener('keydown', onBtnCloseEnterPress);
     hashtagInput.removeEventListener('change', window.hashtag.validate);
+    uploadForm.removeEventListener('submit', onFormSubmit);
     photoFile.value = '';
     photoComment.textContent = '';
     window.setDefaultStyle();

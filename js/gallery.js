@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var URL = 'https://js.dump.academy/kekstagram/data';
 
   var deletePhotos = function () {
     document.querySelectorAll('.picture').forEach(function (it) {
@@ -28,5 +29,5 @@
     clear: deletePhotos
   };
 
-  window.load(loadOriginGallery);
+  window.request('GET', URL, null, loadOriginGallery, window.util.onError);
 })();

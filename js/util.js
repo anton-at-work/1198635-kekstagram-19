@@ -1,11 +1,17 @@
 'use strict';
 
-window.util = (function () {
+(function () {
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
-  var body = document.querySelector('body');
+  var StatusCode = {
+    OK: 200
+  };
+  var TIMEOUT_IN_MS = 10000;
 
-  return {
+  var body = document.querySelector('body');
+  var main = document.querySelector('main');
+
+  window.util = {
     isEsc: function (evt) {
       return evt.keyCode === ESC_KEYCODE;
     },
@@ -17,6 +23,18 @@ window.util = (function () {
     },
     showBodyScroll: function () {
       body.classList.remove('modal-open');
+    },
+    onError: function (message) {
+      main.appendChild(window.render.popUp('error', message));
+    },
+    onSuccess: function (message) {
+      main.appendChild(window.render.popUp('success', message));
+    },
+    isStatusOK: function (xhr) {
+      return xhr.status === StatusCode.OK;
+    },
+    setTimeout: function (xhr) {
+      xhr.timeout = TIMEOUT_IN_MS;
     }
   };
 })();
