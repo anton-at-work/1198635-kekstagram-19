@@ -12,6 +12,7 @@
   var btnClose = uploadDialog.querySelector('#upload-cancel');
   var hashtagInput = uploadDialog.querySelector('.text__hashtags');
   var photoComment = uploadDialog.querySelector('.text__description');
+  var thumbnails = uploadDialog.querySelectorAll('.effects__preview');
 
 
   var onDialogEscPress = function (evt) {
@@ -51,6 +52,9 @@
       var reader = new FileReader();
       reader.addEventListener('load', function () {
         uploadImg.src = reader.result;
+        thumbnails.forEach(function (it) {
+          it.style.backgroundImage = 'url(' + reader.result + ')';
+        });
         uploadDialog.classList.remove('hidden');
         window.util.hideBodyScroll();
         document.addEventListener('keydown', onDialogEscPress);
