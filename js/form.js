@@ -66,15 +66,14 @@
   var closeDialog = function () {
     uploadDialog.classList.add('hidden');
     window.util.showBodyScroll();
+    uploadForm.reset();
+    hashtagInput.setCustomValidity('');
+    window.setDefaultStyle();
     document.removeEventListener('keydown', onDialogEscPress);
     btnClose.removeEventListener('click', closeDialog);
     btnClose.removeEventListener('keydown', onBtnCloseEnterPress);
     hashtagInput.removeEventListener('change', window.hashtag.validate);
     uploadForm.removeEventListener('submit', onFormSubmit);
-    photoFile.value = '';
-    hashtagInput.value = '';
-    photoComment.value = '';
-    window.setDefaultStyle();
   };
 
   photoFile.addEventListener('change', openDialog);
